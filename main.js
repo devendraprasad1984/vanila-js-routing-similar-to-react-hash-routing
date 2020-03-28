@@ -1,6 +1,4 @@
 'use strict';
-const ag=window.agGrid;
-
 const nav = function () {
     return `<div>
     <a href="#/" class="btn black">Home</a>
@@ -36,6 +34,7 @@ const grid = function () {
         });
     }
     grid.handleGridData = (cur,data) => {
+        const ag=window.agGrid;
         let xval=cur.innerHTML;
         cur.innerHTML='loading...';
         let colKeys = Object.keys(data[0]);
