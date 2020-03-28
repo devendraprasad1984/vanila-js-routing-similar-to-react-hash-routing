@@ -28,7 +28,8 @@ const home = function () {
 
 const grid = function () {
     grid.handleApiData=(cur,url)=>{
-        webApi('get',url,[],function(data){
+        let baseUrl='https://jsonplaceholder.typicode.com/';
+        webApi('get',baseUrl+url,[],function(data){
             grid.handleGridData(cur,data);
         },function(er){
             console.log(er);
@@ -73,9 +74,9 @@ const grid = function () {
     <h2>Grid</h2>
     <div>This is Grid Page</div>
     <div>
-        <span class="btn brown" onclick="(${grid.handleApiData})(this,'https://jsonplaceholder.typicode.com/users')">users</span>
-        <span class="btn olive" onclick="(${grid.handleApiData})(this,'https://jsonplaceholder.typicode.com/posts')">posts</span>
-        <span class="btn red" onclick="(${grid.handleApiData})(this,'https://jsonplaceholder.typicode.com/todos')">todo</span>
+        <span class="btn brown" onclick="(${grid.handleApiData})(this,'users')">users</span>
+        <span class="btn olive" onclick="(${grid.handleApiData})(this,'posts')">posts</span>
+        <span class="btn red" onclick="(${grid.handleApiData})(this,'todos')">todo</span>
         <div id="myGrid" style="height: 400px; width: 100%;" class="ag-theme-balham"></div>
     </div>
 </div>`
