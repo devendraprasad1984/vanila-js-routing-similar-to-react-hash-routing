@@ -34,39 +34,25 @@ const grid = function () {
         });
     }
     grid.handleGridData = (cur,data) => {
-        const ag=window.agGrid;
         let xval=cur.innerHTML;
         cur.innerHTML='loading...';
         let colKeys = Object.keys(data[0]);
-        let columnDefs = [];
+        let fields = [];
         for (let i = 0; i < colKeys.length; i++) {
-            columnDefs.push({headerName: colKeys[i], field: colKeys[i], minWidth: 150});
+            fields.push({name: colKeys[i], type:'text', minWidth: 150});
         }
         let gridOptions = {
-            columnDefs: columnDefs,
-            rowData: data,
-            defaultColDef: {
-                flex: 1,
-                sortable: true,
-                filter: true,
-                resizable: true,
-            },
-            pagination: true,
-            rowSelection: 'single',
-            onRowClicked: function (event) {
-                // console.log('A row was clicked');
-            },
-            onColumnResized: function (event) {
-                // console.log('A column was resized');
-            },
-            onGridReady: function (event) {
-                // console.log('The grid is now ready');
-            },
-            // isScrollLag: function() { return false; }
+            width: "100%",
+            height: "400px",
+            inserting: true,
+            editing: true,
+            sorting: true,
+            paging: true,
+            data: data,
+            fields:fields
         };
-        let gridDiv = document.getElementById("myGrid");
-        gridDiv.innerHTML = '';
-        new ag.Grid(gridDiv, gridOptions);
+        // console.log(gridOptions);
+        $('#myGrid').jsGrid(gridOptions);
         cur.innerHTML=xval;
     }
     return `<div>
@@ -76,7 +62,7 @@ const grid = function () {
         <span class="btn brown" onclick="(${grid.handleApiData})(this,'users')">users</span>
         <span class="btn olive" onclick="(${grid.handleApiData})(this,'posts')">posts</span>
         <span class="btn red" onclick="(${grid.handleApiData})(this,'todos')">todo</span>
-        <div id="myGrid" style="height: 400px; width: 100%;" class="ag-theme-balham"></div>
+        <div id="myGrid"</div>
     </div>
 </div>`
 }
