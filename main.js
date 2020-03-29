@@ -24,45 +24,56 @@ const home = function () {
 </div>`
 }
 
+const getHeadings = function (arr) {
+    let colKeys = Object.keys(arr);
+    let fields = [];
+    for (let i = 0; i < arr.length; i++) {
+        fields.push({name: colKeys[i], minWidth: 150});
+    }
+    return fields;
+}
+const json2array = function (jsd) {
+    let res = [];
+    for (let i in jsd) {
+        console.log(jsd[i]);
+        res.push([i, jsd [i]]);
+    }
+    return res;
+}
 const grid = function () {
-    grid.handleApiData=(cur,url)=>{
-        let baseUrl='https://jsonplaceholder.typicode.com/';
-        webApi('get',baseUrl+url,[],function(data){
-            grid.handleGridData(cur,data);
-        },function(er){
+    let handleApiData = (cur, url) => {
+        let gridDiv = document.getElementById('myGrid');
+        gridDiv.innerHTML = 'loading, plz wait...'
+        // let baseUrl='https://jsonplaceholder.typicode.com/';
+        let baseUrl = 'offline/';
+        webApi('get', baseUrl + url + '.json', [], function (data) {
+            grid.handleGridData(gridDiv, cur, data);
+        }, function (er) {
             console.log(er);
+            gridDiv.innerHTML = 'error while loading ' + er;
         });
     }
-    grid.handleGridData = (cur,data) => {
-        let xval=cur.innerHTML;
-        cur.innerHTML='loading...';
+    grid.handleGridData = (gridDiv, cur, data) => {
+        let xval = cur.innerHTML;
+        cur.innerHTML = 'loading...';
         let colKeys = Object.keys(data[0]);
         let fields = [];
-        for (let i = 0; i < colKeys.length; i++) {
-            fields.push({name: colKeys[i], type:'text', minWidth: 150});
-        }
-        let gridOptions = {
-            width: "100%",
-            height: "400px",
-            inserting: true,
-            editing: true,
-            sorting: true,
-            paging: true,
-            data: data,
-            fields:fields
-        };
-        // console.log(gridOptions);
-        $('#myGrid').jsGrid(gridOptions);
-        cur.innerHTML=xval;
+        for (let i = 0; i < colKeys.length; i++)
+            fields.push({name: colKeys[i], minWidth: 150});
+        let heading='<h2 class="red badge">Data for: '+xval.toUpperCase()+ ', Total Data Found: '+data.length+'</h2><br/>';
+        gridDiv.innerHTML =heading+data.map((x,line) => `<div><b>${line+1}:</b> ${
+            fields.map(f => typeof x[f.name] === 'object' ? JSON.stringify(x[f.name]) : x[f.name]).join(`<b> | </b>`)
+        }</div>`).join('');
+        cur.innerHTML = xval;
     }
     return `<div>
     <h2>Grid</h2>
     <div>This is Grid Page</div>
     <div>
-        <span class="btn brown" onclick="(${grid.handleApiData})(this,'users')">users</span>
-        <span class="btn olive" onclick="(${grid.handleApiData})(this,'posts')">posts</span>
-        <span class="btn red" onclick="(${grid.handleApiData})(this,'todos')">todo</span>
-        <div id="myGrid"</div>
+        <span class="btn brown" onclick="(${handleApiData})(this,'users')">users</span>
+        <span class="btn olive" onclick="(${handleApiData})(this,'posts')">posts</span>
+        <span class="btn red" onclick="(${handleApiData})(this,'todos')">todo</span>
+        <div id="myGrid" class="grid"></div>
     </div>
 </div>`
 }
@@ -118,10 +129,11 @@ function isHtmlHttpTextTrue(x) {
     let istxt = (x.indexOf('.txt') !== -1) ? true : false;
     return (ishtml || ishttp || istxt) ? true : false;
 }
+
 let webApi = function (type, uri, data, resolve, reject) {
     let req = new XMLHttpRequest();
     req.onload = function () {
-        var data =JSON.parse(this.response);
+        var data = JSON.parse(this.response);
         if (req.status >= 200 && req.status < 400) {
             resolve(data);
         } else {
