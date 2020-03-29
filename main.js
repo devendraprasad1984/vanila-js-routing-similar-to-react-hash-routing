@@ -1,4 +1,5 @@
 'use strict';
+const helper={};
 const nav = function () {
     return `<div>
     <a href="#/" class="btn black">Home</a>
@@ -24,24 +25,8 @@ const home = function () {
 </div>`
 }
 
-const getHeadings = function (arr) {
-    let colKeys = Object.keys(arr);
-    let fields = [];
-    for (let i = 0; i < arr.length; i++) {
-        fields.push({name: colKeys[i], minWidth: 150});
-    }
-    return fields;
-}
-const json2array = function (jsd) {
-    let res = [];
-    for (let i in jsd) {
-        console.log(jsd[i]);
-        res.push([i, jsd [i]]);
-    }
-    return res;
-}
 const grid = function () {
-    let handleApiData = (cur, url) => {
+    grid.handleApiData = function(cur, url) {
         let gridDiv = document.getElementById('myGrid');
         gridDiv.innerHTML = 'loading, plz wait...'
         // let baseUrl='https://jsonplaceholder.typicode.com/';
@@ -53,29 +38,73 @@ const grid = function () {
             gridDiv.innerHTML = 'error while loading ' + er;
         });
     }
-    grid.handleGridData = (gridDiv, cur, data) => {
+    grid.handleGridData = function(gridDiv, cur, data) {
+        helper.data=data;
         let xval = cur.innerHTML;
         cur.innerHTML = 'loading...';
         let colKeys = Object.keys(data[0]);
         let fields = [];
         for (let i = 0; i < colKeys.length; i++)
-            fields.push({name: colKeys[i], minWidth: 150});
+            fields.push({name: colKeys[i], style: 'width:auto;'});
         let heading='<h2 class="red badge">Data for: '+xval.toUpperCase()+ ', Total Data Found: '+data.length+'</h2><br/>';
-        gridDiv.innerHTML =heading+data.map((x,line) => `<div><b>${line+1}:</b> ${
-            fields.map(f => typeof x[f.name] === 'object' ? JSON.stringify(x[f.name]) : x[f.name]).join(`<b> | </b>`)
-        }</div>`).join('');
+        let header=`<tr class="gridline tdheader">${fields.map(x=>`<td>${x.name.toUpperCase()}</td>`).join('')}</tr>`;
+        let downloadButton=`<span class="btn primary" onclick="helper.generateCSV()">Export CSV</span>`;
+        gridDiv.innerHTML =heading+downloadButton+'<table>'+header+data.map((x,line) => `
+            <tr class="gridline">
+            ${fields.map(f => typeof x[f.name] === 'object' ? `<td style="${f.style}">${JSON.stringify(x[f.name])}</td>` : `<td>${x[f.name]}</td>`).join('')
+        }</tr>`).join('')+'</table>';
         cur.innerHTML = xval;
     }
     return `<div>
     <h2>Grid</h2>
     <div>This is Grid Page</div>
     <div>
-        <span class="btn brown" onclick="(${handleApiData})(this,'users')">users</span>
-        <span class="btn olive" onclick="(${handleApiData})(this,'posts')">posts</span>
-        <span class="btn red" onclick="(${handleApiData})(this,'todos')">todo</span>
+        <span class="btn brown" onclick="grid.handleApiData(this,'users')">users</span>
+        <span class="btn olive" onclick="grid.handleApiData(this,'posts')">posts</span>
+        <span class="btn red" onclick="grid.handleApiData(this,'todos')">todo</span>
         <div id="myGrid" class="grid"></div>
     </div>
 </div>`
+}
+    // <!--        <span class="btn red" onclick="(${handleApiData})(this,'todos')">todo</span>-->
+helper.data={};
+helper.generateCSV=function() {
+    let rowsArr=[];
+    let rows=helper.data;
+    if(typeof rows==='object'){
+        let xr=[];
+        for(let i in rows){
+            let row=rows[i];
+            let line=[]
+            for(let r in row){
+                line.push(row[r]);
+            }
+            xr.push(line);
+        }
+        rowsArr=xr;
+    }else{
+        rowsArr=rows;
+    }
+    let delim = ',';
+    // console.log(rowsArr);
+    let csvContent = rowsArr.map(e => e.join(delim)).join("\n");
+    var blob = new Blob([csvContent], {
+        type: "application/csv;charset=utf-8;"
+    });
+    let fileName = 'download.csv';
+    if (window.navigator.msSaveBlob) {
+        navigator.msSaveBlob(blob, fileName); // FOR IE BROWSER
+    } else {
+        var link = document.createElement("a");
+        var csvUrl = URL.createObjectURL(blob);
+        link.href = csvUrl;
+        link.target = '_blank';
+        link.style = "visibility:hidden";
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 }
 
 const contact = function () {

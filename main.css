@@ -10,10 +10,11 @@ body {
     height: fit-content;
 }
 
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-}
+/*::-webkit-scrollbar {*/
+/*    width: 10px;*/
+/*    !*background: transparent;*!*/
+/*    background-color: black;*/
+/*}*/
 
 *, ::after, ::before {
     box-sizing: border-box
@@ -38,13 +39,6 @@ div button {
     cursor: pointer;
     text-decoration: underline;
     color: white;
-}
-
-div span {
-    margin: 2px;
-    padding: 2px;
-    font-weight: bolder;
-    cursor: pointer;
 }
 
 /*html5 compatible old browser IE*/
@@ -745,6 +739,9 @@ hr {
     }
 }
 
+table{
+    padding:0px;
+}
 
 .grid{
     height:400px;
@@ -754,4 +751,28 @@ hr {
     padding: 5px;
     margin:2px;
     line-height: 1.5;
+}
+.gridline{
+    display: inline-flex;
+    border-bottom: 2px solid black;
+    width: 100%;
+    margin-bottom: 4px;
+}
+.gridline td{
+    padding-right: 10px;
+    word-break: break-word;
+    min-width: 120px;
+    width: auto;
+    white-space: normal;
+    text-align: left;
+    float: left;
+}
+.gridline.tdheader td{
+    font-size: 14pt;
+    font-weight: bolder;
+    border-bottom: 2px solid black;
+    cursor: pointer;
+    background-color: brown;
+    color: white;
+    min-width: 120px;
 }
