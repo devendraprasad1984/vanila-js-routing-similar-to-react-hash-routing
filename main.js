@@ -32,6 +32,7 @@ const grid = function () {
         // let baseUrl='https://jsonplaceholder.typicode.com/';
         let baseUrl = 'offline/';
         webApi('get', baseUrl + url + '.json', [], function (data) {
+            helper.data=data;
             grid.handleGridData(gridDiv, cur, data);
         }, function (er) {
             console.log(er);
@@ -39,20 +40,18 @@ const grid = function () {
         });
     }
     grid.handleGridData = function(gridDiv, cur, data) {
-        helper.data=data;
         let xval = cur.innerHTML;
         cur.innerHTML = 'loading...';
         let colKeys = Object.keys(data[0]);
         let fields = [];
         for (let i = 0; i < colKeys.length; i++)
             fields.push({name: colKeys[i], style: 'width:auto;'});
-        let heading='<h2 class="red badge">Data for: '+xval.toUpperCase()+ ', Total Data Found: '+data.length+'</h2><br/>';
-        let header=`<tr class="gridline tdheader">${fields.map(x=>`<td>${x.name.toUpperCase()}</td>`).join('')}</tr>`;
-        let downloadButton=`<span class="btn primary" onclick="helper.generateCSV()">Export CSV</span>`;
-        gridDiv.innerHTML =heading+downloadButton+'<table>'+header+data.map((x,line) => `
-            <tr class="gridline">
+        let downloadButton=`<span class="btn primary" onclick="helper.generateCSV()">Export ${helper.data.length} data for ${xval.toUpperCase()}</span>`;
+        let header=`<tr class="headline">${fields.map(x=>`<td>${x.name.toUpperCase()} <br/><input type="text" onchange="helper.filterData('${x.name}',this)"/></td>`).join('')}</tr>`;
+        let body= '<div class="grid"><table>'+header+data.map((x,line) => `<tr>
             ${fields.map(f => typeof x[f.name] === 'object' ? `<td style="${f.style}">${JSON.stringify(x[f.name])}</td>` : `<td>${x[f.name]}</td>`).join('')
-        }</tr>`).join('')+'</table>';
+        }</tr>`).join('')+'</table></div>'
+        gridDiv.innerHTML =downloadButton+body;
         cur.innerHTML = xval;
     }
     return `<div>
@@ -62,12 +61,15 @@ const grid = function () {
         <span class="btn brown" onclick="grid.handleApiData(this,'users')">users</span>
         <span class="btn olive" onclick="grid.handleApiData(this,'posts')">posts</span>
         <span class="btn red" onclick="grid.handleApiData(this,'todos')">todo</span>
-        <div id="myGrid" class="grid"></div>
+        <div id="myGrid"></div>
     </div>
 </div>`
 }
-    // <!--        <span class="btn red" onclick="(${handleApiData})(this,'todos')">todo</span>-->
 helper.data={};
+helper.filterData=function(p1,cur){
+    let fltr=helper.data.filter(x=>x[p1].toLowerCase().indexOf(cur.value)!==-1);
+    console.log(fltr)
+}
 helper.generateCSV=function() {
     let rowsArr=[];
     let rows=helper.data;

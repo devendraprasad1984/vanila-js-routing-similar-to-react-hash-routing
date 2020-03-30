@@ -16,11 +16,6 @@ body {
 /*    background-color: black;*/
 /*}*/
 
-*, ::after, ::before {
-    box-sizing: border-box
-}
-
-
 div::after {
     content: '';
     display: block;
@@ -53,6 +48,12 @@ article, aside, details, figcaption, figure, footer, header, section, hgroup, me
     color: rgba(0, 0, 0, .87);
     font-smoothing: antialiased;
 }
+*, ::after, ::before {
+    box-sizing: border-box;
+    margin-top:2px;
+    margin-bottom: 2px;
+}
+
 
 h1 {
     font-size: 2em;
@@ -739,40 +740,43 @@ hr {
     }
 }
 
-table{
-    padding:0px;
-}
-
 .grid{
-    height:400px;
-    width: 100%;
     position: relative;
     overflow:auto;
-    padding: 5px;
-    margin:2px;
-    line-height: 1.5;
-}
-.gridline{
-    display: inline-flex;
-    border-bottom: 2px solid black;
+    height: 300px;
     width: 100%;
-    margin-bottom: 4px;
 }
-.gridline td{
-    padding-right: 10px;
-    word-break: break-word;
-    min-width: 120px;
-    width: auto;
-    white-space: normal;
-    text-align: left;
-    float: left;
+
+table{
+    padding:0px;
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top:5px;
+    margin-bottom:5px;
 }
-.gridline.tdheader td{
-    font-size: 14pt;
+table, th, td {
+    /*border: 1px solid black;*/
+    padding:5px;
+    font-size: 12px;
+}
+tr {
+    border: 1px solid black;
+}
+.headline{
+    background-color: saddlebrown;
     font-weight: bolder;
-    border-bottom: 2px solid black;
-    cursor: pointer;
-    background-color: brown;
+    font-size: 14pt;
+}
+.headline td{
     color: white;
-    min-width: 120px;
+    cursor:pointer;
+}
+td input[type=text]{
+    min-width: 80px;
+    width: auto;
+    border: 1px solid gray;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border-bottom: 1px solid gray;
 }
