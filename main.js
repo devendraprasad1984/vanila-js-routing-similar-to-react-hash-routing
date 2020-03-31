@@ -22,7 +22,19 @@ const home = function () {
     <span class="btn primary" onclick="onSaveClick('saved')">Save</span>
     <span class="btn red" onclick="onSaveClick('clear')">Clear</span>
     </div>
+    <div>
+        <input type="month" id="triggerDate1" />
+        <span class="btn grey" onclick="helper.dateStep(-1)">Prev</span>
+        <span class="btn brown" onclick="helper.dateStep(1)">Next</span>        
+    </div>
 </div>`
+}
+
+helper.dateStep=function(cnt){
+    if(cnt<0)
+        document.getElementById('triggerDate1').stepDown(Math.abs(cnt));
+    else
+        document.getElementById('triggerDate1').stepUp(cnt);
 }
 
 const grid = function () {
