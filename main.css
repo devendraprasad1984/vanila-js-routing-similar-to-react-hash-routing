@@ -747,6 +747,7 @@ hr {
     width: 100%;
 }
 
+
 table{
     padding:0px;
     table-layout: auto;
@@ -756,18 +757,17 @@ table{
     margin-bottom:5px;
 }
 table, th, td {
-    /*border: 1px solid black;*/
-    padding:5px;
+    border: 1px solid black;
+    padding:2px;
     font-size: 12px;
-    width:auto;
+    /*width:auto;*/
 }
 tr {
     border: 1px solid black;
 }
-::-webkit-resizer {
-    background-color: white;
-    border-right:5px solid red;
-}
+/*::-webkit-resizer {*/
+/*    border-right:2px dotted red;*/
+/*}*/
 .headline td{
     font-size: 12pt;
     font-weight: bolder;
@@ -778,8 +778,16 @@ tr {
     border:1px solid gray;
     overflow-x: auto;
 }
-td{
-    word-break: break-word;
+td div.cell{
+    overflow:hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    /*white-space: nowrap;*/
+    min-width: 100px;
+}
+
+.columnSelector:hover {
+    border-right: 2px solid #17a2b8;
 }
 
 tr:nth-of-type(odd) {

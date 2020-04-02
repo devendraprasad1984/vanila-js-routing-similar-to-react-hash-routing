@@ -11,6 +11,19 @@ const nav = function () {
 <!--    <a href="#/dt" class="btn black">JQ Data Table</a>-->
 </div>`
 }
+let routes={}
+function generateRoutes(){
+    routes = {
+        '/': home,
+        '/contact': contact,
+        '/about': about,
+        '/admin': admin,
+        '/grid': grid,
+        '/pq': pqGridExample,
+        '/dt': dtable,
+    };
+}
+
 
 let onSaveClick = function (msg) {
     alert('i am ' + msg);
@@ -59,18 +72,14 @@ function grid() {
         let colKeys = Object.keys(data[0]);
         let fields = [];
         // for (let i = 1; i <= colKeys.length; i++) fields.push({aTargets:[i],bSortable:false});
-        for (let i = 0; i <colKeys.length; i++) fields.push({name:colKeys[i],style:''});
+        for (let i = 0; i <colKeys.length; i++) fields.push({name:colKeys[i]});
         let downloadButton=`<span class="btn primary" onclick="helper.generateCSV()">Export ${helper.data.length} data for ${xval.toUpperCase()}</span>`;
         let header=`<tr class="headline">${fields.map(x=>`<td>${x.name.toUpperCase()} <br/><input type="text" onchange="helper.filterData('${x.name}',this)"/></td>`).join('')}</tr>`;
-        let body= '<div class="grid"><table>'+header+data.map((x,line) => `<tr>
-            ${fields.map(f => typeof x[f.name] === 'object' ? `<td style="${f.style}">${JSON.stringify(x[f.name])}</td>` : `<td>${x[f.name]}</td>`).join('')
-        }</tr>`).join('')+'</table></div>'
+        let body= '<div class="grid"><table id="gridX">'+header+data.map((x,line) => `<tr>
+            ${fields.map(f => `<td><div class="cell">${typeof x[f.name] === 'object'?JSON.stringify(x[f.name]):x[f.name]}</div></td>`).join('')
+        }</tr>`).join('')+'</table></div>';
         gridDiv.innerHTML =downloadButton+body;
         cur.innerHTML = xval;
-
-        // $('#tableData').innerHTML='';
-        // let xdata=data.map(x=>Object.values(x)).map(x=>x);
-        // $('#tableData').dataTable({bRetrieve: true,aaData:xdata,aoColumnDefs:fields,bPaginate:true,bFilter:true});
     }
     return `<div>
     <h2>Grid</h2>
@@ -79,11 +88,11 @@ function grid() {
         <span class="btn blue" onclick="grid.handleApiData(this,'posts')">posts</span>
         <span class="btn blue" onclick="grid.handleApiData(this,'todos')">todo</span>
         <div id="myGrid"></div>
-<!--        <table id="tableData"></table>-->
     </div>
 </div>`
 }
 helper.data={};
+
 helper.filterData=function(p1,cur){
     let fltr=helper.data.filter(x=>x[p1].toLowerCase().indexOf(cur.value)!==-1);
     console.log(fltr)
@@ -329,18 +338,7 @@ function pqGridExample() {
 
 
 
-
-
-let routes = {
-    '/': home,
-    '/contact': contact,
-    '/about': about,
-    '/admin': admin,
-    '/grid': grid,
-    '/pq': pqGridExample,
-    '/dt': dtable,
-};
-
+generateRoutes();
 let router = (evt) => {
     const url = window.location.hash.slice(1) || "/";
     const routeResolved = routes[url];
