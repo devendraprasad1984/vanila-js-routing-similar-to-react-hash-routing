@@ -759,22 +759,36 @@ table, th, td {
     /*border: 1px solid black;*/
     padding:5px;
     font-size: 12px;
+    width:auto;
 }
 tr {
     border: 1px solid black;
 }
-.headline{
-    background-color: saddlebrown;
-    font-weight: bolder;
-    font-size: 14pt;
+::-webkit-resizer {
+    background-color: white;
+    border-right:5px solid red;
 }
 .headline td{
+    font-size: 12pt;
+    font-weight: bolder;
+    background-color: black;
     color: white;
     cursor:pointer;
+    resize: horizontal;
+    border:1px solid gray;
+    overflow-x: auto;
 }
+td{
+    word-break: break-word;
+}
+
+tr:nth-of-type(odd) {
+    background: #eee;
+}
+
 td input[type=text]{
-    min-width: 80px;
-    width: auto;
+    min-width: 60px;
+    width: 100px;
     border: 1px solid gray;
     border-radius: 4px;
     box-sizing: border-box;
