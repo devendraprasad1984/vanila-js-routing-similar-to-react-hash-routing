@@ -12,6 +12,9 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     color: rgba(0, 0, 0, .87);
     font-smoothing: antialiased;
+    width: auto !important;
+    margin-left: 1em !important;
+    margin-right: 1em !important
 }
 
 /*::-webkit-scrollbar {*/
@@ -47,7 +50,7 @@ article, aside, details, figcaption, figure, footer, header, section, hgroup, me
 
 *, ::after, ::before {
     box-sizing: border-box;
-    margin-top:2px;
+    margin-top: 2px;
     margin-bottom: 2px;
 }
 
@@ -56,6 +59,7 @@ h1 {
     font-size: 2em;
     margin: .67em 0
 }
+
 h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child {
     margin-top: 0
 }
@@ -125,6 +129,7 @@ section {
     position: relative;
     width: 100%;
 }
+
 .ribbon {
     position: relative;
     margin: 0;
@@ -364,11 +369,11 @@ p {
 }
 
 .primary {
-    background-color:#2185d0;
+    background-color: #2185d0;
     color: white;
 }
 
-.secondary{
+.secondary {
     background-color: grey;
     color: white;
 }
@@ -652,8 +657,9 @@ pre code {
     text-decoration: none;
     font-size: 25px;
     display: block;
-    color:white;
+    color: white;
 }
+
 .sidenav a:hover {
     color: red;
 }
@@ -737,8 +743,8 @@ hr {
     }
 }
 
-.grid{
-    overflow:auto;
+.grid {
+    overflow: auto;
     height: 400px;
     width: 100%;
 }
@@ -753,38 +759,40 @@ hr {
     margin-bottom: 2px;
 }
 
-table{
+table {
     border-collapse: collapse;
     width: 100%;
     border-spacing: 0px;
     /*white-space: nowrap;*/
     /*border: 1px solid #ddd;*/
 }
-table tbody, table thead
-{
+
+table tbody, table thead {
     display: block;
 }
+
 td {
     text-align: left;
     font-size: 12px;
     /*text-overflow: ellipsis;*/
     min-width: 100px;
-    border:1px solid gray;
+    border: 1px solid gray;
     word-break: break-all;
 }
 
-.headline th{
+.headline th {
     font-size: 12pt;
     font-weight: bolder;
     background-color: black;
     color: white;
-    cursor:pointer;
+    cursor: pointer;
     position: sticky;
-    top:0;
+    top: 0;
     /*resize: horizontal;*/
     text-align: left;
     min-width: 100px;
 }
+
 /*tr {*/
 /*    border-bottom: 1px solid #ddd;*/
 /*}*/
@@ -804,4 +812,53 @@ tr:hover {
 /*    border-radius: 4px;*/
 /*    box-sizing: border-box;*/
 /*    border-bottom: 1px solid gray;*/
+/*}*/
+
+ul.checkListBox {
+    background: #FFF;
+    font-size: 20px;
+    max-width: 20em;
+    margin: auto;
+    padding: 0.5em 1em;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+}
+
+div.label[type="checkbox"]:before {
+    position: relative;
+    display: block;
+    width: 11px;
+    height: 11px;
+    border: 1px solid #808080;
+    content: "";
+    background: #FFF;
+}
+div.label[type="checkbox"]:after {
+    position: relative;
+    display: block;
+    left: 2px;
+    top: -11px;
+    width: 7px;
+    height: 7px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #B3B3B3 #dcddde #dcddde #B3B3B3;
+    content: "";
+    background-image: linear-gradient(135deg, #B1B6BE 0%, #FFF 100%);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/*li.check {*/
+/*    font-size: 20px;*/
+/*    webkit-transition-delay: 0s;*/
+/*    transition-delay: 0s;*/
+/*    color: #5EBEC1;*/
+/*    opacity: 0.6;*/
+/*    transition: all 0.4s linear 0.4s;*/
+/*    display: block;*/
+/*    position: relative;*/
+/*    padding: 1em 1em 1em 16%;*/
+/*    margin: 0 auto;*/
+/*    cursor: pointer;*/
+/*    border-bottom: solid 1px #ddd;*/
 /*}*/

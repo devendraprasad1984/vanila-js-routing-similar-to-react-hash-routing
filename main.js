@@ -7,6 +7,7 @@ const nav = function () {
     <a href="#/contact" class="btn black">Contact</a>
     <a href="#/admin" class="btn black">Admin</a>
     <a href="#/grid" class="btn black">Grid</a>
+    <a href="#/ui" class="btn black">Semantic UI</a>
 </div>`
 }
 let routes = {}
@@ -18,7 +19,29 @@ function generateRoutes() {
         '/about': about,
         '/admin': admin,
         '/grid': grid,
+        '/ui': ui,
     };
+}
+
+let ui=function(){
+    let listVals=[1,2,3,4,5];
+    ui.checkList=function(){
+        let x=document.querySelector('.checkListBox').getElementsByTagName('li');;
+        for(let i=0;i<x.length;i++){
+            let li=x[i];
+            let input=li.querySelector('input[type=checkbox]');
+            console.log(li.innerText,input.value,input.checked);
+        }
+    }
+    return `<div>
+        <h2>Semantic UI Test</h2>
+        <div>
+            <ul class="checkListBox">
+            ${listVals.map(x=>`<li><input type="checkbox" value="${x}"/>${x}</li>`).join('')}
+            </ul>
+            <span class="btn yellow" onclick="ui.checkList()">Check</span>
+        </div>
+    </div>`;
 }
 
 
