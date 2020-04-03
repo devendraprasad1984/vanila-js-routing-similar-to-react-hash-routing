@@ -1,5 +1,5 @@
 'use strict';
-const helper={};
+const helper = {};
 const nav = function () {
     return `<div>
     <a href="#/" class="btn black">Home</a>
@@ -7,20 +7,17 @@ const nav = function () {
     <a href="#/contact" class="btn black">Contact</a>
     <a href="#/admin" class="btn black">Admin</a>
     <a href="#/grid" class="btn black">Grid</a>
-<!--    <a href="#/pq" class="btn black">PQGrid</a>-->
-<!--    <a href="#/dt" class="btn black">JQ Data Table</a>-->
 </div>`
 }
-let routes={}
-function generateRoutes(){
+let routes = {}
+
+function generateRoutes() {
     routes = {
         '/': home,
         '/contact': contact,
         '/about': about,
         '/admin': admin,
         '/grid': grid,
-        '/pq': pqGridExample,
-        '/dt': dtable,
     };
 }
 
@@ -45,40 +42,41 @@ const home = function () {
 </div>`
 }
 
-helper.dateStep=function(cnt){
-    if(cnt<0)
+helper.dateStep = function (cnt) {
+    if (cnt < 0)
         document.getElementById('triggerDate1').stepDown(Math.abs(cnt));
     else
         document.getElementById('triggerDate1').stepUp(cnt);
 }
 
 function grid() {
-    grid.handleApiData = function(cur, url) {
+    grid.handleApiData = function (cur, url) {
         let gridDiv = document.getElementById('myGrid');
         gridDiv.innerHTML = 'loading, plz wait...'
         // let baseUrl='https://jsonplaceholder.typicode.com/';
         let baseUrl = 'offline/';
         webApi('get', baseUrl + url + '.json', [], function (data) {
-            helper.data=data;
+            helper.data = data;
             grid.handleGridData(gridDiv, cur, data);
         }, function (er) {
             console.log(er);
             gridDiv.innerHTML = 'error while loading ' + er;
         });
     }
-    grid.handleGridData = function(gridDiv, cur, data) {
+    grid.handleGridData = function (gridDiv, cur, data) {
         let xval = cur.innerHTML;
+        let thisGridTab = gridDiv.id + "_table";
         cur.innerHTML = 'loading...';
         let colKeys = Object.keys(data[0]);
         let fields = [];
-        // for (let i = 1; i <= colKeys.length; i++) fields.push({aTargets:[i],bSortable:false});
-        for (let i = 0; i <colKeys.length; i++) fields.push({name:colKeys[i]});
-        let downloadButton=`<span class="btn primary" onclick="helper.generateCSV()">Export ${helper.data.length} data for ${xval.toUpperCase()}</span>`;
-        let header=`<tr class="headline">${fields.map(x=>`<td>${x.name.toUpperCase()} <br/><input type="text" onchange="helper.filterData('${x.name}',this)"/></td>`).join('')}</tr>`;
-        let body= '<div class="grid"><table id="gridX">'+header+data.map((x,line) => `<tr>
-            ${fields.map(f => `<td><div class="cell">${typeof x[f.name] === 'object'?JSON.stringify(x[f.name]):x[f.name]}</div></td>`).join('')
-        }</tr>`).join('')+'</table></div>';
-        gridDiv.innerHTML =downloadButton+body;
+        for (let i = 0; i < colKeys.length; i++) fields.push({name: colKeys[i]});
+        let downloadButton = `<span class="btn yellow" onclick="helper.generateCSV()">Export ${helper.data.length} data for ${xval.toUpperCase()}</span>`;
+        let search = `<input type="text" id="myInput" class="search" onchange="helper.filterData(this.value,'${thisGridTab}')" placeholder="Search.." />`;
+        let header = `<tr class="headline">${fields.map(x => `<th>${x.name.toUpperCase()}</th>`).join('')}</tr>`;
+        let body = '<div class="grid"><table id="' + thisGridTab + '">' + header + data.map((x, line) => `<tr>
+            ${fields.map(f => `<td>${typeof x[f.name] === 'object' ? JSON.stringify(x[f.name]) : x[f.name]}</td>`).join('')
+        }</tr>`).join('') + '</table></div>';
+        gridDiv.innerHTML = downloadButton + search + body;
         cur.innerHTML = xval;
     }
     return `<div>
@@ -91,28 +89,39 @@ function grid() {
     </div>
 </div>`
 }
-helper.data={};
 
-helper.filterData=function(p1,cur){
-    let fltr=helper.data.filter(x=>x[p1].toLowerCase().indexOf(cur.value)!==-1);
-    console.log(fltr)
+helper.data = {};
+helper.filterData = function (cur, tableId) {
+    // let fltr=helper.data.filter(x=>x[p1].toLowerCase().indexOf(cur.value)!==-1);
+    var table, tr, td, txtValue;
+    table = document.getElementById(tableId);
+    tr = table.getElementsByTagName("tr");
+    for (let i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (let j = 0; j < td.length; j++) {
+            txtValue =td[j].textContent || td[j].innerText;
+            let found=txtValue.toUpperCase().indexOf(cur.toUpperCase());
+            tr[i].style.display = found !== -1 ? 'block' : 'none';
+            if(found!==-1) break
+        }
+    }
 }
-helper.generateCSV=function() {
-    let rowsArr=[];
-    let rows=helper.data;
-    if(typeof rows==='object'){
-        let xr=[];
-        for(let i in rows){
-            let row=rows[i];
-            let line=[]
-            for(let r in row){
+helper.generateCSV = function () {
+    let rowsArr = [];
+    let rows = helper.data;
+    if (typeof rows === 'object') {
+        let xr = [];
+        for (let i in rows) {
+            let row = rows[i];
+            let line = []
+            for (let r in row) {
                 line.push(row[r]);
             }
             xr.push(line);
         }
-        rowsArr=xr;
-    }else{
-        rowsArr=rows;
+        rowsArr = xr;
+    } else {
+        rowsArr = rows;
     }
     let delim = ',';
     // console.log(rowsArr);
@@ -242,101 +251,11 @@ let getById = function (id) {
     return document.getElementById(id);
 };
 
-function dtable(){
+function dtable() {
     return `
     <div>This is Data Table Example</div>
     `
 }
-
-function pqGridExample() {
-    var arrayData = [
-        { rank: 1, company: 'Exxon Mobil', revenues: 339938.0, profits: 36130.0 },
-        { rank: 2, company: 'Wal-Mart Stores', revenues: 315654.0, profits: 11231.0 },
-        { rank: 3, company: 'Royal Dutch Shell', revenues: 306731.0, profits: 25311.0 },
-        { rank: 4, company: 'BP', revenues: 267600.0, profits: 22341.0 },
-        { rank: 5, company: 'General Motors', revenues: 192604.0, profits: -10567.0 },
-        { rank: 6, company: 'Chevron', revenues: 189481.0, profits: 14099.0 },
-        { rank: 7, company: 'DaimlerChrysler', revenues: 186106.3, profits: 3536.3 },
-        { rank: 8, company: 'Toyota Motor', revenues: 185805.0, profits: 12119.6 },
-        { rank: 9, company: 'Ford Motor', revenues: 177210.0, profits: 2024.0 },
-        { rank: 10, company: 'ConocoPhillips', revenues: 166683.0, profits: 13529.0 },
-        { rank: 11, company: 'General Electric', revenues: 157153.0, profits: 16353.0 },
-        { rank: 12, company: 'Total', revenues: 152360.7, profits: 15250.0 },
-        { rank: 13, company: 'ING Group', revenues: 138235.3, profits: 8958.9 },
-        { rank: 14, company: 'Citigroup', revenues: 131045.0, profits: 24589.0 },
-        { rank: 15, company: 'AXA', revenues: 129839.2, profits: 5186.5 },
-        { rank: 16, company: 'Allianz', revenues: 121406.0, profits: 5442.4 },
-        { rank: 17, company: 'Volkswagen', revenues: 118376.6, profits: 1391.7 },
-        { rank: 18, company: 'Fortis', revenues: 112351.4, profits: 4896.3 },
-        { rank: 19, company: 'Crédit Agricole', revenues: 110764.6, profits: 7434.3 },
-        { rank: 20, company: 'American Intl. Group', revenues: 108905.0, profits: 10477.0 }
-    ];
-    var totalData,averageData;
-    var revenueTotal = 0,profitTotal = 0;
-    pqGridExample.calculateSummary=function() {
-        for (let i = 0; i < arrayData.length; i++) {
-            let row = arrayData[i];
-            revenueTotal += parseFloat(row["revenues"]);
-            profitTotal += parseFloat(row["profits"]);
-        }
-        let revenueAverage = $.paramquery.formatCurrency(revenueTotal / arrayData.length);
-        let profitAverage = $.paramquery.formatCurrency(profitTotal / arrayData.length);
-        revenueTotal = $.paramquery.formatCurrency(revenueTotal);
-        profitTotal = $.paramquery.formatCurrency(profitTotal);
-        totalData = { rank: "<b>Total</b>", company: "", revenues: revenueTotal, profits: profitTotal, pq_rowcls: 'green' };
-        averageData = { rank: "<b>Average</b>", company: "", revenues: revenueAverage, profits: profitAverage, pq_rowcls: 'yellow' };
-    }
-    pqGridExample.pulldata=function(){
-        var obj = { width: "95%", height: 600, title: "Summary of rows",resizable: true,flexHeight: true};
-        obj.columnTemplate = { width: '25%' };
-        obj.colModel = [
-            { title: "Rank", align: "right", dataType: "integer", dataIndx: "rank", width: '15%' },
-            { title: "Company", dataIndx: "company", width: '35%' },
-            { title: "Revenues ($ millions)", align: "right", dataType: "float", dataIndx: "revenues" },
-            { title: "Profits ($ millions)", align: "right", dataType: "float", dataIndx: "profits" }
-        ];
-        obj.dataModel = {
-            data: arrayData
-        };
-        obj.pageModel = {
-            type: "local",
-            rPP: 20,
-            rPPOptions: [10, 15, 20]
-        };
-        var $summary = "";
-        obj.render = function (evt, ui) {
-            $summary = $("<div class='pq-grid-summary'  ></div>")
-                .prependTo($(".pq-grid-bottom", this));
-            pqGridExample.calculateSummary();
-        }
-        obj.cellBeforeSave = function (evt, ui) {
-            //debugger;
-            var cd = ui.newVal;
-            if (cd == "") {
-                return false;
-            }
-        }
-        obj.cellSave = function (evt, ui) {
-            pqGridExample.calculateSummary();
-            obj.refresh.call(this);
-        }
-        obj.refresh = function (evt, ui) {
-            var data = [totalData, averageData]; //JSON (array of objects)
-            var obj = { data: data, $cont: $summary }
-            $(this).pqGrid("createTable", obj);
-        }
-        let $grid = $("#pqGrid").pqGrid(obj);
-        console.log($grid);
-    }
-
-    return `<div>
-    <h2>PqGrid Exmaple</h2>
-    <span class="btn red" onclick="pqGridExample.pulldata()">Pull Data</span>
-    <div id="pqGrid"></div>
-    </div>`;
-};
-
-
 
 generateRoutes();
 let router = (evt) => {
