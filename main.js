@@ -7,7 +7,7 @@ const nav = function () {
     <a href="#/contact" class="btn black">Contact</a>
     <a href="#/admin" class="btn black">Admin</a>
     <a href="#/grid" class="btn black">Grid</a>
-    <a href="#/ui" class="btn black">Semantic UI</a>
+    <a href="#/ui" class="btn black">UI</a>
 </div>`
 }
 let routes = {}
@@ -23,23 +23,26 @@ function generateRoutes() {
     };
 }
 
-let ui=function(){
+let ui=function(xid){
     let listVals=[1,2,3,4,5];
     ui.checkList=function(){
-        let x=document.querySelector('.checkListBox').getElementsByTagName('li');;
-        for(let i=0;i<x.length;i++){
-            let li=x[i];
-            let input=li.querySelector('input[type=checkbox]');
-            console.log(li.innerText,input.value,input.checked);
+        ui.selected=[];
+        let x=document.querySelector('.checkListBox').getElementsByTagName('li');
+        let ips=Object.values(x).map(li=>li.querySelector('input[type=checkbox]:checked')).filter(x=>x!==null);
+        for(let i=0;i<ips.length;i++){
+            let input=ips[i];
+           ui.selected.push(input.value+' -> '+input.checked);
         }
+        document.getElementById('xlabel').innerHTML=ui.selected;
     }
     return `<div>
-        <h2>Semantic UI Test</h2>
+        <h2>UI Test</h2>
         <div>
             <ul class="checkListBox">
-            ${listVals.map(x=>`<li><input type="checkbox" value="${x}"/>${x}</li>`).join('')}
+            ${listVals.map((x,id)=>`<li><input type="checkbox" id="ck${id}" value="${x}"/><label for="ck${id}">${x}</label></li>`).join('')}
             </ul>
-            <span class="btn yellow" onclick="ui.checkList()">Check</span>
+            <div><h1 id="xlabel"></h1></div>
+            <div><span class="btn yellow" onclick="ui.checkList('xlabel')">Check</span></div>
         </div>
     </div>`;
 }

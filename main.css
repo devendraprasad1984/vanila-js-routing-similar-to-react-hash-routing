@@ -817,48 +817,55 @@ tr:hover {
 ul.checkListBox {
     background: #FFF;
     font-size: 20px;
-    max-width: 20em;
-    margin: auto;
-    padding: 0.5em 1em;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+    max-width: 10em;
+    /*margin: auto; !*center*!*/
+    margin:10px;
+    padding: 0.5em .5em;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+input[type=checkbox] + label {
+    display: block;
+    margin: .3em;
+    cursor: pointer;
+    padding: 0.2em 0.3em 0.5em 0.3em;
 }
 
-div.label[type="checkbox"]:before {
-    position: relative;
-    display: block;
-    width: 11px;
-    height: 11px;
-    border: 1px solid #808080;
-    content: "";
-    background: #FFF;
-}
-div.label[type="checkbox"]:after {
-    position: relative;
-    display: block;
-    left: 2px;
-    top: -11px;
-    width: 7px;
-    height: 7px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #B3B3B3 #dcddde #dcddde #B3B3B3;
-    content: "";
-    background-image: linear-gradient(135deg, #B1B6BE 0%, #FFF 100%);
-    background-repeat: no-repeat;
-    background-position: center;
+input[type=checkbox] {
+    display: none;
 }
 
-/*li.check {*/
-/*    font-size: 20px;*/
-/*    webkit-transition-delay: 0s;*/
-/*    transition-delay: 0s;*/
-/*    color: #5EBEC1;*/
-/*    opacity: 0.6;*/
-/*    transition: all 0.4s linear 0.4s;*/
-/*    display: block;*/
-/*    position: relative;*/
-/*    padding: 1em 1em 1em 16%;*/
-/*    margin: 0 auto;*/
-/*    cursor: pointer;*/
-/*    border-bottom: solid 1px #ddd;*/
-/*}*/
+input[type=checkbox] + label:before {
+    content: "\2714";
+    border: 0.1em solid #000;
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    padding-left: 0.2em;
+    padding-bottom: 0.3em;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    color: transparent;
+    transition: .2s;
+}
+
+input[type=checkbox] + label:active:before {
+    transform: scale(0);
+}
+
+input[type=checkbox]:checked + label:before {
+    background-color:#7d64ff;
+    border-color: #7d64ff;
+    /*color: #fff;*/
+}
+
+input[type=checkbox]:disabled + label:before {
+    transform: scale(1);
+    border-color: #aaa;
+}
+
+input[type=checkbox]:checked:disabled + label:before {
+    transform: scale(1);
+    background-color: #bfb;
+    border-color: #bfb;
+}
