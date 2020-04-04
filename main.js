@@ -25,25 +25,70 @@ function generateRoutes() {
 
 let ui=function(xid){
     let listVals=[1,2,3,4,5];
-    ui.checkList=function(){
-        ui.selected=[];
-        let x=document.querySelector('.checkListBox').getElementsByTagName('li');
-        let ips=Object.values(x).map(li=>li.querySelector('input[type=checkbox]:checked')).filter(x=>x!==null);
-        for(let i=0;i<ips.length;i++){
-            let input=ips[i];
-           ui.selected.push(input.value+' -> '+input.checked);
-        }
-        document.getElementById('xlabel').innerHTML=ui.selected;
+    let currentTab = -1;
+    ui.checkList=function(curElm){
+        let parentULClass=curElm.parentElement.parentElement.className;
+        document.getElementById('xlabel').innerHTML=helper.checkList('.'+parentULClass);
+    }
+    ui.nextPrev=function(step){
+        let tabs=document.getElementsByClassName('tab');
+        Object.values(tabs).map(x=>x.style.display='none');
+        if(currentTab<0 || currentTab>=tabs.length-1) currentTab=-1;
+        currentTab=(currentTab==-1 ? 0 : currentTab+step);
+        if(currentTab>=0 && currentTab<=tabs.length) tabs[currentTab].style.display='block';
+        document.getElementById('submitBtn').style.display=(currentTab===tabs.length-1) ?'inline-block':'none';
+    }
+    ui.testSubmit=function (cls) {
+        let elms=Object.values(document.getElementsByClassName(cls)[0].elements);
+        let formVals={}
+        elms.map(x=>formVals[x.name]=x.value);
+        console.log(formVals);
+        alert('form data is being submitted, check console');
     }
     return `<div>
         <h2>UI Test</h2>
         <div>
             <ul class="checkListBox">
-            ${listVals.map((x,id)=>`<li><input type="checkbox" id="ck${id}" value="${x}"/><label for="ck${id}">${x}</label></li>`).join('')}
+            ${listVals.map((x,id)=>`<li><input type="checkbox" id="ck${id}" value="${x}" onclick="ui.checkList(this)"/><label for="ck${id}">${x}</label></li>`).join('')}
             </ul>
             <div><h1 id="xlabel"></h1></div>
-            <div><span class="btn yellow" onclick="ui.checkList('xlabel')">Check</span></div>
+            <div>
+            <h2>Toggle Switch</h2>
+            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label><br><br>
+            <label class="switch"><input type="checkbox"><span class="slider round"></span></label>
+            <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
+            <label><input type="checkbox" class="ios-switch bigswitch green" checked /><div><div></div></div></label>
+            </div>
         </div>
+        
+        <form class="regForm">
+          <h1>Register:</h1>
+          <div style="overflow:auto;">
+            <div style="float:right;">
+              <span class="btn red" id="submitBtn" onclick="ui.testSubmit('regForm')" style="display: none">Submit</span>
+              <span class="btn yellow" id="prevBtn" onclick="ui.nextPrev(-1)">Previous</span>
+              <span class="btn blue" id="nextBtn" onclick="ui.nextPrev(1)">Next</span>
+            </div>
+          </div>
+          <div class="tab">Name:
+            <p><input placeholder="First name..." name="fname"></p>
+            <p><input placeholder="Last name..." name="lname"></p>
+          </div>
+          <div class="tab">Contact Info:
+            <p><input placeholder="E-mail..."  name="email"></p>
+            <p><input placeholder="Phone..." name="phone"></p>
+          </div>
+          <div class="tab">Birthday:
+            <p><input placeholder="dd" name="dd"></p>
+            <p><input placeholder="mm" name="nn"></p>
+            <p><input placeholder="yyyy" name="yyyy"></p>
+          </div>
+          <div class="tab">Login Info:
+            <p><input placeholder="Username..." oninput="this.className = ''" name="uname"></p>
+            <p><input placeholder="Password..." oninput="this.className = ''" name="pword" type="password"></p>
+          </div>
+          </form>
     </div>`;
 }
 
@@ -131,6 +176,15 @@ helper.filterData = function (cur, tableId) {
             if(found!==-1) break
         }
     }
+}
+helper.checkList=function(cls,id){
+    let selected=[];
+    let idElm=cls||id;
+    let x=document.querySelector(idElm).getElementsByTagName('li');
+    let ips=Object.values(x).map(li=>li.querySelector('input[type=checkbox]:checked')).filter(x=>x!==null);
+    for(let i=0;i<ips.length;i++)
+        selected.push([ips[i].value, ips[i].checked]);
+    return selected;
 }
 helper.generateCSV = function () {
     let rowsArr = [];
