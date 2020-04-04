@@ -1,7 +1,7 @@
 'use strict';
-const dpMod={};
+const dpMod = {};
 dpMod.helper = {};
-dpMod.nav = function() {
+dpMod.nav = function () {
     return `<div id="navBar">
     <a href="#/" class="btn black">Home</a>
     <a href="#/about" class="btn black">About</a>
@@ -13,36 +13,37 @@ dpMod.nav = function() {
 }
 
 dpMod.routes = {}
-dpMod.generateRoutes=function() {
+dpMod.generateRoutes = function () {
+    let {home, contact, about, admin, grid, ui} = dpMod;
     dpMod.routes = {
-        '/': dpMod.home,
-        '/contact': dpMod.contact,
-        '/about': dpMod.about,
-        '/admin': dpMod.admin,
-        '/grid': dpMod.grid,
-        '/ui': dpMod.ui,
+        '/': home,
+        '/contact': contact,
+        '/about': about,
+        '/admin': admin,
+        '/grid': grid,
+        '/ui': ui,
     };
 }
 
-dpMod.ui=function(xid){
-    let listVals=[1,2,3,4,5];
+dpMod.ui = function (xid) {
+    let listVals = [1, 2, 3, 4, 5];
     let currentTab = -1;
-    dpMod.ui.checkList=function(curElm){
-        let parentULClass=curElm.parentElement.parentElement.className;
-        document.getElementById('xlabel').innerHTML=dpMod.helper.checkList('.'+parentULClass);
+    dpMod.ui.checkList = function (curElm) {
+        let parentULClass = curElm.parentElement.parentElement.className;
+        document.getElementById('xlabel').innerHTML = dpMod.helper.checkList('.' + parentULClass);
     }
-    dpMod.ui.nextPrev=function(step){
-        let tabs=document.getElementsByClassName('tab');
-        Object.values(tabs).map(x=>x.style.display='none');
-        if(currentTab<0 || currentTab>=tabs.length-1) currentTab=-1;
-        currentTab=(currentTab==-1 ? 0 : currentTab+step);
-        if(currentTab>=0 && currentTab<=tabs.length) tabs[currentTab].style.display='block';
-        document.getElementById('submitBtn').style.display=(currentTab===tabs.length-1) ?'inline-block':'none';
+    dpMod.ui.nextPrev = function (step) {
+        let tabs = document.getElementsByClassName('tab');
+        Object.values(tabs).map(x => x.style.display = 'none');
+        if (currentTab < 0 || currentTab >= tabs.length - 1) currentTab = -1;
+        currentTab = (currentTab == -1 ? 0 : currentTab + step);
+        if (currentTab >= 0 && currentTab <= tabs.length) tabs[currentTab].style.display = 'block';
+        document.getElementById('submitBtn').style.display = (currentTab === tabs.length - 1) ? 'inline-block' : 'none';
     }
-    dpMod.ui.testSubmit=function (cls) {
-        let elms=Object.values(document.getElementsByClassName(cls)[0].elements);
-        let formVals={}
-        elms.map(x=>formVals[x.name]=x.value);
+    dpMod.ui.testSubmit = function (cls) {
+        let elms = Object.values(document.getElementsByClassName(cls)[0].elements);
+        let formVals = {}
+        elms.map(x => formVals[x.name] = x.value);
         console.log(formVals);
         alert('form data is being submitted, check console');
     }
@@ -50,7 +51,7 @@ dpMod.ui=function(xid){
         <h2>UI Test</h2>
         <div>
             <ul class="checkListBox">
-            ${listVals.map((x,id)=>`<li><input type="checkbox" id="ck${id}" value="${x}" onclick="dpMod.ui.checkList(this)"/><label for="ck${id}">${x}</label></li>`).join('')}
+            ${listVals.map((x, id) => `<li><input type="checkbox" id="ck${id}" value="${x}" onclick="dpMod.ui.checkList(this)"/><label for="ck${id}">${x}</label></li>`).join('')}
             </ul>
             <div><h1 id="xlabel"></h1></div>
             <div>
@@ -62,7 +63,7 @@ dpMod.ui=function(xid){
             <label><input type="checkbox" class="ios-switch bigswitch green" checked /><div><div></div></div></label>
             </div>
         </div>
-        
+        <div  class="box">
         <form class="regForm">
           <h1>Register:</h1>
           <div style="overflow:auto;">
@@ -72,27 +73,27 @@ dpMod.ui=function(xid){
               <span class="btn blue" id="nextBtn" onclick="dpMod.ui.nextPrev(1)">Next</span>
             </div>
           </div>
-          <div class="tab">Name:
+          <div class="tab"><h2>Name:</h2>
             <p><input placeholder="First name..." name="fname"></p>
             <p><input placeholder="Last name..." name="lname"></p>
           </div>
-          <div class="tab">Contact Info:
+          <div class="tab"><h2>Contact Info:</h2>
             <p><input placeholder="E-mail..."  name="email"></p>
             <p><input placeholder="Phone..." name="phone"></p>
           </div>
-          <div class="tab">Birthday:
+          <div class="tab"><h2>Birthday:</h2>
             <p><input placeholder="dd" name="dd"></p>
             <p><input placeholder="mm" name="nn"></p>
             <p><input placeholder="yyyy" name="yyyy"></p>
           </div>
-          <div class="tab">Login Info:
+          <div class="tab"><h2>Login Info:</h2>
             <p><input placeholder="Username..." oninput="this.className = ''" name="uname"></p>
             <p><input placeholder="Password..." oninput="this.className = ''" name="pword" type="password"></p>
           </div>
           </form>
+          </div>
     </div>`;
 }
-
 
 dpMod.onSaveClick = function (msg) {
     alert('i am ' + msg);
@@ -121,10 +122,10 @@ dpMod.helper.dateStep = function (cnt) {
         document.getElementById('triggerDate1').stepUp(cnt);
 }
 
-dpMod.grid=function() {
+dpMod.grid = function () {
     dpMod.grid.handleApiData = function (cur, url) {
         let gridDiv = document.getElementById('myGrid');
-        gridDiv.innerHTML = 'loading, plz wait...'
+        gridDiv.innerHTML = '<h1>loading, plz wait...</h1>';
         // let baseUrl='https://jsonplaceholder.typicode.com/';
         let baseUrl = 'offline/';
         dpMod.helper.webApi('get', baseUrl + url + '.json', [], function (data) {
@@ -136,20 +137,20 @@ dpMod.grid=function() {
         });
     }
     dpMod.grid.handleGridData = function (gridDiv, cur, data) {
-        let xval = cur.innerHTML;
+        // let xval = cur.innerHTML;
         let thisGridTab = gridDiv.id + "_table";
-        cur.innerHTML = 'loading...';
+        // cur.innerHTML = 'loading...';
         let colKeys = Object.keys(data[0]);
         let fields = [];
         for (let i = 0; i < colKeys.length; i++) fields.push({name: colKeys[i]});
-        let downloadButton = `<span class="btn yellow" onclick="dpMod.helper.generateCSV()">Export ${dpMod.helper.data.length} data for ${xval.toUpperCase()}</span>`;
+        let downloadButton = `<span class="btn yellow" onclick="dpMod.helper.generateCSV()">Export ${dpMod.helper.data.length}</span>`;
         let search = `<input type="text" id="myInput" class="search" onchange="dpMod.helper.filterData(this.value,'${thisGridTab}')" placeholder="Search.." />`;
         let header = `<tr class="headline">${fields.map(x => `<th>${x.name.toUpperCase()}</th>`).join('')}</tr>`;
         let body = '<div class="grid"><table id="' + thisGridTab + '">' + header + data.map((x, line) => `<tr>
             ${fields.map(f => `<td>${typeof x[f.name] === 'object' ? JSON.stringify(x[f.name]) : x[f.name]}</td>`).join('')
         }</tr>`).join('') + '</table></div>';
         gridDiv.innerHTML = downloadButton + search + body;
-        cur.innerHTML = xval;
+        // cur.innerHTML = xval;
     }
     return `<div>
     <h2>Grid</h2>
@@ -171,19 +172,19 @@ dpMod.helper.filterData = function (cur, tableId) {
     for (let i = 1; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
         for (let j = 0; j < td.length; j++) {
-            txtValue =td[j].textContent || td[j].innerText;
-            let found=txtValue.toUpperCase().indexOf(cur.toUpperCase());
+            txtValue = td[j].textContent || td[j].innerText;
+            let found = txtValue.toUpperCase().indexOf(cur.toUpperCase());
             tr[i].style.display = found !== -1 ? 'block' : 'none';
-            if(found!==-1) break
+            if (found !== -1) break
         }
     }
 }
-dpMod.helper.checkList=function(cls,id){
-    let selected=[];
-    let idElm=cls||id;
-    let x=document.querySelector(idElm).getElementsByTagName('li');
-    let ips=Object.values(x).map(li=>li.querySelector('input[type=checkbox]:checked')).filter(x=>x!==null);
-    for(let i=0;i<ips.length;i++)
+dpMod.helper.checkList = function (cls, id) {
+    let selected = [];
+    let idElm = cls || id;
+    let x = document.querySelector(idElm).getElementsByTagName('li');
+    let ips = Object.values(x).map(li => li.querySelector('input[type=checkbox]:checked')).filter(x => x !== null);
+    for (let i = 0; i < ips.length; i++)
         selected.push([ips[i].value, ips[i].checked]);
     return selected;
 }
@@ -246,7 +247,27 @@ dpMod.about = function () {
 dpMod.admin = function () {
     return `<div>
     <h2>Admin</h2>
-    <div>This is Amdin I am fine</div>
+    <div>This is Admin I am fine</div>
+<!--    <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>-->
+    <div id="id01" class="modal box">
+    <form class="modal-content animate">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="img_avatar2.png" alt="Avatar" class="avatar">
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>Username</b></label><input type="text" placeholder="Enter Username" name="uname" required />
+      <label for="psw"><b>Password</b></label><input type="password" placeholder="Enter Password" name="psw" required />
+      <span class="btn green">Login</span>
+      <label for="remember"><input type="checkbox" checked="checked" name="remember">Remember me</label>
+    </div>
+    <div class="container" style="background-color:#f1f1f1">
+      <span onclick="document.getElementById('id01').style.display='none'" class="btn red">Cancel</span>
+      <span class="psw"><a href="#">Forgot password?</a></span>
+    </div>
+    </form>
+    </div>
 </div>`
 }
 
@@ -261,17 +282,17 @@ dpMod.toggleLeftPanel = function (e) {
     left.style.display = (left.style.display == 'none' ? 'block' : 'none');
 }
 
-dpMod.show=function(id2show) {
+dpMod.show = function (id2show) {
     id2show.style.display = 'block';
 }
 
-dpMod.hide=function(id2hide) {
+dpMod.hide = function (id2hide) {
     setTimeout(function () {
         id2hide.style.display = 'none';
     }, 300);
 }
 
-dpMod.isHtmlHttpTextTrue=function(x) {
+dpMod.isHtmlHttpTextTrue = function (x) {
     let ishtml = (x.indexOf('.html') !== -1) ? true : false;
     let ishttp = (x.indexOf('http') !== -1) ? true : false;
     let istxt = (x.indexOf('.txt') !== -1) ? true : false;
@@ -297,7 +318,7 @@ dpMod.helper.webApi = function (type, uri, data, resolve, reject) {
     }
 }
 
-dpMod.handleOverlayContent=function(text, id) {
+dpMod.handleOverlayContent = function (text, id) {
     loadID.style.display = 'block';
     // moveProgress();
     let overlayDiv = getById(idOverlay);
@@ -316,13 +337,13 @@ dpMod.handleOverlayContent=function(text, id) {
     loadID.style.display = 'none';
 }
 
-dpMod.openNav=function(divid, param) {
+dpMod.openNav = function (divid, param) {
     let x = getById(divid);
     x.style.width = "100%";
     x.style.display = "block";
 }
 
-dpMod.closeNav=function(divid) {
+dpMod.closeNav = function (divid) {
     let x = getById(divid);
     x.style.width = "0%";
     x.style.display = "none";
@@ -332,20 +353,31 @@ dpMod.getById = function (id) {
     return document.getElementById(id);
 };
 
-dpMod.setActiveIcon=function(elm,url){
-    let nav=Object.values(elm.getElementsByTagName('a'));
-    let matchIcon=nav.filter(x=>x.hash==='#'+url)[0];
-    matchIcon.className='btn active';
+dpMod.setActiveIcon = function (elm, url) {
+    let nav = Object.values(elm.getElementsByTagName('a'));
+    let matchIcon = nav.filter(x => x.hash === '#' + url)[0];
+    matchIcon.className = 'btn active';
 }
 dpMod.generateRoutes();
 dpMod.router = (evt) => {
     const url = window.location.hash.slice(1) || "/";
     const routeResolved = dpMod.routes[url];
-    let navElm=dpMod.nav();
-    let root=document.getElementById('root');
+    let navElm = dpMod.nav();
+    let root = document.getElementById('root');
     root.innerHTML = navElm + '<br/>' + (routeResolved)(); //IIFE
-    dpMod.setActiveIcon(root,url);
+    dpMod.setActiveIcon(root, url);
+    dpMod.init(url);
 };
+dpMod.init=function(url){
+    switch (url) {
+        case '/ui':
+            dpMod.ui.nextPrev(0); break;
+        case '/grid':
+            dpMod.grid.handleApiData(undefined,'users'); break;
+        case '/admin':
+            document.getElementById('id01').style.display='block'; break;
+    }
+}
 
 // For first load or when routes are changed in browser url box.
 window.addEventListener('load', dpMod.router);
