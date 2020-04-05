@@ -26,11 +26,12 @@ dpMod.generateRoutes = function () {
 }
 
 dpMod.ui = function (xid) {
-    let listVals = [1, 2, 3, 4, 5];
+    let listVals = ['field1','field2','field3','field4','field5','field6','field7','field8','field9','field10'];
     let currentTab = -1;
     dpMod.ui.checkList = function (curElm) {
-        let parentULClass = curElm.parentElement.parentElement.className;
-        document.getElementById('xlabel').innerHTML = dpMod.helper.checkList('.' + parentULClass);
+        let curid=curElm.parentElement.parentElement.id;
+        // let parentULClass = curElm.parentElement.parentElement.className;
+        document.getElementById('xlabel').innerHTML = Object.values(dpMod.helper.checkList(curid));
     }
     dpMod.ui.nextPrev = function (step) {
         let tabs = document.getElementsByClassName('tab');
@@ -50,10 +51,18 @@ dpMod.ui = function (xid) {
     return `<div>
         <h2>UI Test</h2>
         <div>
-            <ul class="checkListBox">
-            ${listVals.map((x, id) => `<li><input type="checkbox" id="ck${id}" value="${x}" onclick="dpMod.ui.checkList(this)"/><label for="ck${id}">${x}</label></li>`).join('')}
+        <div class="row">
+            <ul class="checkListBox column" id="checkBox1">
+            ${listVals.map((x, id) => `<li><input type="checkbox" id="ck_1_${id}" value="${x}" onclick="dpMod.ui.checkList(this)"/><label for="ck_1_${id}">${x}</label></li>`).join('')}
             </ul>
-            <div><h1 id="xlabel"></h1></div>
+            <ul class="checkListBox column" id="checkBox2">
+            ${listVals.map((x, id) => `<li><input type="checkbox" id="ck_2_${id}" value="${x}" onclick="dpMod.ui.checkList(this)"/><label for="ck_2_${id}">${x}</label></li>`).join('')}
+            </ul>
+            <ul class="checkListBox column" id="checkBox3">
+            ${listVals.map((x, id) => `<li><input type="checkbox" id="ck_3_${id}" value="${x}" onclick="dpMod.ui.checkList(this)"/><label for="ck_3_${id}">${x}</label></li>`).join('')}
+            </ul>
+            </div>
+            <div id="xlabel" style="overflow: auto; width:100%"></div>
             <div>
             <h2>Toggle Switch</h2>
             <label class="switch"><input type="checkbox"><span class="slider"></span></label>
@@ -179,14 +188,16 @@ dpMod.helper.filterData = function (cur, tableId) {
         }
     }
 }
-dpMod.helper.checkList = function (cls, id) {
-    let selected = [];
-    let idElm = cls || id;
-    let x = document.querySelector(idElm).getElementsByTagName('li');
+dpMod.helper.selected={};
+dpMod.helper.checkList = function (curid) {
+    let local=[]
+    local.push(curid);
+    let x = document.getElementById(curid).getElementsByTagName('li');
     let ips = Object.values(x).map(li => li.querySelector('input[type=checkbox]:checked')).filter(x => x !== null);
     for (let i = 0; i < ips.length; i++)
-        selected.push([ips[i].value, ips[i].checked]);
-    return selected;
+        local.push([ips[i].value]);
+    dpMod.helper.selected[curid]=local;
+    return dpMod.helper.selected;
 }
 dpMod.helper.generateCSV = function () {
     let rowsArr = [];
@@ -248,7 +259,6 @@ dpMod.admin = function () {
     return `<div>
     <h2>Admin</h2>
     <div>This is Admin I am fine</div>
-<!--    <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>-->
     <div id="id01" class="modal box">
     <form class="modal-content animate">
     <div class="imgcontainer">
